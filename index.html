@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>基礎課程 佛法會考線上題庫</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background: #94B5B2;
+      color: #1f2937;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .card {
+      background: #d3dcd8;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .subtitle {
+      color: #6b7280;
+      font-size:18px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 25px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      opacity: 0.96;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+      transform: none;
+    }
+
+    .btn-primary {
+      background: #bbc8d8;
+      color: #4a4a4a;
+      font-size:24px;
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #4a4a4a;
+      font-size:25px;      
+    }
+
+    .btn-success {
+      background: #e8cf8f;
+      color: #4a4a4a ;
+      font-size:25px;
+    }
+
+    .btn-danger {
+      background: #dc2626;
+      color: #4a4a4a ;
+    }
+
+    .btn-warning {
+      background: #ffd44c;
+      color: #4a4a4a ;
+    }
+
+    .btn-option {
+      width: 100%;
+      text-align: left;
+      background: #f9fafb;
+      border: 1px solid #d1d5db;
+      margin-bottom: 6px;
+      white-space: normal;
+      line-height: 1.4;
+    }
+
+    .btn-option.correct {
+      background: #dcfce7;
+      border-color: #e8cf8f;
+    }
+
+    .btn-option.wrong {
+      background: #fee2e2;
+      border-color: #dc2626;
+    }
+
+    .btn-option.disabled {
+      opacity: 0.8;
+      cursor: default;
+    }
+
+    .topic-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .topic-btn {
+      background: #Faf6f1;
+      border: 1px solid #d1d5db;
+      color: #111827;
+      text-align: center;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 18px;
+      line-height: 1;
+      min-height: 60px;
+    }
+
+    .topic-btn:hover {
+      background: #048db7;
+      border-color: #93c5fd;
+    }
+
+    .topic-btn.all {
+      background: #Faf6f1;
+      color: #111827;
+      border: 1px solid #d1d5db;
+    }
+
+    .topic-btn.all:hover {
+      background: #048db7;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .question-box {
+      font-size: 24px;
+      line-height: 1.8;
+      margin: 16px 0 20px;
+      white-space: pre-wrap;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: #6b7280;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .pill {
+      background: #94B5B2;
+      color: #1f2937;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 15px;
+    }
+
+    .result-box {
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 16px;
+      line-height: 1.8;
+    }
+
+    .result-correct {
+      background: #D5E5E4;
+      color: #166534;
+    }
+
+    .result-wrong {
+      background: #Efe3df;
+      color: #991b1b;
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+/* 讓小測驗設定頁面內容置中 */
+#quizSetupView {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 水平置中 */
+  text-align: center;  /* 文字內容置中 */
+  font-size: 17px;
+}
+
+#quizSetupView ul {
+  list-style-position: inside; /* 讓清單的小圓點也跟著置中 */
+  padding-left: 0;
+  text-align: left; /* 如果希望清單文字靠左但整體置中，可保留此行；若要文字也置中則改為 center */
+  display: inline-block; /* 配合父層 text-align center 達成清單整體置中 */
+  font-size: 17px;
+}
+
+#quizSetupView .top-actions {
+  justify-content: center; /* 讓下方的按鈕水平置中 */
+  width: 100%;
+}
+
+
+    .progress {
+      margin-top: 12px;
+      color: #374151;
+      font-weight: 600;
+    }
+
+    .score-large {
+      font-size: 38px;
+      font-weight: 800;
+      color: #111827;
+      margin: 8px 0;
+    }
+
+    .review-item {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 14px;
+      background: #Faf6f1;
+    }
+
+    .review-item h4 {
+      margin: 0 0 8px;
+      color: #111827;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6b7280;
+      font-size: 20px;
+    }
+
+    .footer-tip {
+      margin-top: 10px;
+      color: #6b7280;
+      font-size: 17px;
+    }
+
+    .topic-count {
+      display: inline-block;
+      margin-top: 4px;
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    /* modal */
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.38);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 16px;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 460px;
+      background: #Faf6f1;
+      border-radius: 16px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+      padding: 24px;
+    }
+
+    .modal-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #111827;
+    }
+
+    .modal-text {
+      color: #374151;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 640px) {
+      .question-box {
+        font-size: 22px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      .topic-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="loadingView" class="card loading">
+      題庫載入中...
+    </div>
+
+    <div id="homeView" class="hidden">
+      <div class="card title">
+        <h1>基礎課程 佛法會考線上題庫</h1>
+        
+      </div>
+
+      <div class="card">
+        <div class="grid grid-2">
+          <button class="btn-primary" onclick="showPracticeSetup()">日常練習</button>
+          <button class="btn-success" onclick="showQuizSetup()">模擬測驗</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="practiceSetupView" class="hidden card">
+      <h2>日常練習</h2>
+      <div>選擇練習主題</div>
+      <div id="practiceTopicButtons" class="topic-buttons"></div>
+
+      <div class="top-actions">
+        <button class="btn-secondary" onclick="goHome()">回主畫面</button>
+      </div>
+    </div>
+
+    <div id="practiceView" class="hidden card">
+      <div class="meta">
+        <span class="pill" id="practiceTopicPill"></span>
+       
+      </div>
+
+      <div class="progress" id="practiceProgress"></div>
+      <div class="question-box" id="practiceQuestion"></div>
+      <div id="practiceOptions"></div>
+
+      <div id="practiceResult" class="hidden"></div>
+
+      <div class="top-actions">
+        <button class="btn-warning hidden" id="practiceNextBtn" onclick="nextPracticeQuestion()">下一題</button>
+        <button class="btn-secondary" onclick="showPracticeSetup()">選擇主題</button>
+        <button class="btn-secondary" onclick="goHome()">回主畫面</button>
+      </div>
+    </div>
+
+    <div id="quizSetupView" class="hidden card">
+      <h2>模擬測驗</h2>
+      <p>本次測驗將從題庫中隨機抽出：</p>
+      <ul>
+        <li>選擇題 30 題</li>
+        <li>是非題 30 題</li>
+      </ul>
+      
+      <div class="top-actions">
+        <button class="btn-success" onclick="startQuiz()">開始測驗</button>
+        <button class="btn-secondary" onclick="goHome()">回主畫面</button>
+      </div>
+    </div>
+
+    <div id="quizView" class="hidden card">
+      <div class="meta">
+        <span class="pill" id="quizTopicPill"></span>
+      
+      </div>
+
+      <div class="progress" id="quizProgress"></div>
+      <div class="question-box" id="quizQuestion"></div>
+      <div id="quizOptions"></div>
+
+      <div class="top-actions">
+        <button class="btn-secondary" id="quizPrevBtn" onclick="prevQuizQuestion()">上一題</button>
+        <button class="btn-primary" id="quizNextBtn" onclick="nextQuizQuestion()">下一題</button>
+        <button class="btn-success hidden" id="quizSubmitBtn" onclick="submitQuiz()">交卷</button>
+        <button class="btn-secondary" onclick="showQuizSetup()">返回設定</button>
+      </div>
+    </div>
+
+    <div id="quizResultView" class="hidden card">
+      <h2>測驗結果</h2>
+      <div class="score-large" id="quizScoreText"></div>
+      <div id="quizAccuracyText"></div>
+      <div id="quizSummaryText" style="margin-top:10px;"></div>
+
+      <div class="top-actions">
+        <button class="btn-success" onclick="showQuizReview()">查看錯題回顧</button>
+        <button class="btn-primary" onclick="startQuiz()">再測一次</button>
+        <button class="btn-secondary" onclick="goHome()">回主畫面</button>
+      </div>
+    </div>
+
+    <div id="quizReviewView" class="hidden card">
+      <h2>錯題回顧</h2>
+      <div id="quizReviewList"></div>
+
+      <div class="top-actions">
+        <button class="btn-secondary" onclick="backToQuizResult()">返回成績</button>
+        <button class="btn-primary" onclick="goHome()">回主畫面</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="customAlertModal" class="modal-mask hidden">
+    <div class="modal-box">
+      <div class="modal-title" id="alertTitle">溫馨提醒</div>
+      <div class="modal-text" id="alertText"></div>
+      <div class="modal-actions">
+        <button class="btn-primary" onclick="closeAlert()">確定</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="customConfirmModal" class="modal-mask hidden">
+    <div class="modal-box">
+      <div class="modal-title">交卷確認</div>
+      <div class="modal-text" id="confirmText"></div>
+      <div class="modal-actions">
+        <button id="confirmYesBtn" class="btn-success">確定交卷</button>
+        <button class="btn-secondary" onclick="closeConfirm()">返回檢查</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="practiceCompleteModal" class="modal-mask hidden">
+    <div class="modal-box">
+      <div class="modal-title" id="practiceCompleteTitle">本單元完成</div>
+      <div class="modal-text" id="practiceCompleteText"></div>
+      <div class="modal-actions">
+        <button id="practiceNextTopicBtn" class="btn-primary hidden">進到下一個主題</button>
+        <button class="btn-secondary" onclick="closePracticeCompleteModalAndBack()">回到主題選擇</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allQuestions = [];
+    let allTopics = [];
+
+    let practicePool = [];
+    let practiceIndex = 0;
+    let practiceAnswered = false;
+    let currentPracticeTopic = '__ALL__';
+
+    let quizPool = [];
+    let quizIndex = 0;
+    let quizAnswers = {};
+    let quizWrongList = [];
+
+    // --- 自訂彈窗控制函式 ---
+    function showAlert(text, title = '🌟溫馨提醒') {
+      document.getElementById('alertTitle').textContent = title;
+      document.getElementById('alertText').textContent = text;
+      document.getElementById('customAlertModal').classList.remove('hidden');
+    }
+
+    function closeAlert() {
+      document.getElementById('customAlertModal').classList.add('hidden');
+    }
+
+    function showConfirm(text, onConfirm) {
+      document.getElementById('confirmText').textContent = text;
+      const yesBtn = document.getElementById('confirmYesBtn');
+      yesBtn.onclick = () => {
+        closeConfirm();
+        onConfirm();
+      };
+      document.getElementById('customConfirmModal').classList.remove('hidden');
+    }
+
+    function closeConfirm() {
+      document.getElementById('customConfirmModal').classList.add('hidden');
+    }
+    // -----------------------
+
+    function init() {
+      google.script.run
+        .withSuccessHandler(data => {
+          allQuestions = Array.isArray(data) ? data : [];
+          allTopics = [...new Set(allQuestions.map(q => q.topic).filter(Boolean))];
+          buildPracticeTopicButtons();
+          showOnly('homeView');
+        })
+        .withFailureHandler(err => {
+          document.getElementById('loadingView').innerHTML = '載入失敗：' + (err.message || err);
+        })
+        .getAllQuestions();
+    }
+
+    function showOnly(viewId) {
+      const ids = [
+        'loadingView',
+        'homeView',
+        'practiceSetupView',
+        'practiceView',
+        'quizSetupView',
+        'quizView',
+        'quizResultView',
+        'quizReviewView'
+      ];
+
+      ids.forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+
+      document.getElementById(viewId).classList.remove('hidden');
+    }
+
+    function goHome() {
+      showOnly('homeView');
+    }
+
+    function getTopicQuestionCount(topic) {
+      return allQuestions.filter(q => q.topic === topic).length;
+    }
+
+    function buildPracticeTopicButtons() {
+      const container = document.getElementById('practiceTopicButtons');
+      container.innerHTML = '';
+
+      const allCount = allQuestions.length;
+      const allBtn = document.createElement('button');
+      allBtn.className = 'topic-btn all';
+      allBtn.innerHTML = `
+        <div>全部題目</div>
+        <div class="topic-count">（${allCount}題）</div>
+      `;
+      allBtn.onclick = () => startPractice('__ALL__');
+      container.appendChild(allBtn);
+
+      allTopics.forEach(topic => {
+        const count = getTopicQuestionCount(topic);
+        const btn = document.createElement('button');
+        btn.className = 'topic-btn';
+        btn.innerHTML = `
+          <div>${escapeHtml(topic)}</div>
+          <div class="topic-count">（${count}題）</div>
+        `;
+        btn.onclick = () => startPractice(topic);
+        container.appendChild(btn);
+      });
+    }
+
+    function showPracticeSetup() {
+      showOnly('practiceSetupView');
+    }
+
+    function startPractice(topicValue) {
+      const selectedTopic = topicValue || '__ALL__';
+      currentPracticeTopic = selectedTopic;
+
+      if (selectedTopic === '__ALL__') {
+        practicePool = sortQuestionsForPractice([...allQuestions]);
+      } else {
+        practicePool = sortQuestionsForPractice(
+          allQuestions.filter(q => q.topic === selectedTopic)
+        );
+      }
+
+      if (practicePool.length === 0) {
+        showAlert('找不到可練習的題目');
+        return;
+      }
+
+      practiceIndex = 0;
+      practiceAnswered = false;
+      renderPracticeQuestion();
+      showOnly('practiceView');
+    }
+
+    function sortQuestionsForPractice(arr) {
+      return [...arr].sort((a, b) => {
+        const topicA = String(a.topic || '');
+        const topicB = String(b.topic || '');
+        if (topicA !== topicB) {
+          return topicA.localeCompare(topicB, 'zh-Hant');
+        }
+
+        const numA = parseQuestionNumber(a.number);
+        const numB = parseQuestionNumber(b.number);
+        if (numA !== numB) {
+          return numA - numB;
+        }
+
+        return String(a.uid || '').localeCompare(String(b.uid || ''));
+      });
+    }
+
+    function parseQuestionNumber(value) {
+      if (value === null || value === undefined || value === '') return Number.MAX_SAFE_INTEGER;
+      const num = Number(String(value).replace(/[^\d.-]/g, ''));
+      return Number.isNaN(num) ? Number.MAX_SAFE_INTEGER : num;
+    }
+
+    function renderPracticeQuestion() {
+      const q = practicePool[practiceIndex];
+      practiceAnswered = false;
+
+      document.getElementById('practiceTopicPill').textContent = `主題：${q.topic || '未分類'}`;
+     // document.getElementById('practiceTypePill').textContent = q.type === 'mc' ? '選擇題' : '是非題';
+      document.getElementById('practiceProgress').textContent = `第 ${practiceIndex + 1} / ${practicePool.length} 題`;
+      document.getElementById('practiceQuestion').textContent = q.question || '';
+
+      const optionsDiv = document.getElementById('practiceOptions');
+      optionsDiv.innerHTML = '';
+
+      (q.options || []).forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-option';
+        btn.innerHTML = `<strong>${escapeHtml(opt.index)}.</strong> ${escapeHtml(opt.text)}`;
+        btn.onclick = () => answerPractice(opt.index);
+        optionsDiv.appendChild(btn);
+      });
+
+      const resultDiv = document.getElementById('practiceResult');
+      resultDiv.classList.add('hidden');
+      resultDiv.innerHTML = '';
+
+      document.getElementById('practiceNextBtn').classList.add('hidden');
+    }
+
+    function answerPractice(selectedIndex) {
+      if (practiceAnswered) return;
+
+      practiceAnswered = true;
+      const q = practicePool[practiceIndex];
+      const correct = String(q.answer) === String(selectedIndex);
+
+      const buttons = document.querySelectorAll('#practiceOptions .btn-option');
+      buttons.forEach((btn, idx) => {
+        const optionIndex = q.options[idx].index;
+        btn.classList.add('disabled');
+        btn.onclick = null;
+
+        if (String(optionIndex) === String(q.answer)) {
+          btn.classList.add('correct');
+        }
+        if (String(optionIndex) === String(selectedIndex) && String(selectedIndex) !== String(q.answer)) {
+          btn.classList.add('wrong');
+        }
+      });
+
+      const correctOption = (q.options || []).find(o => String(o.index) === String(q.answer));
+      const resultDiv = document.getElementById('practiceResult');
+      resultDiv.classList.remove('hidden');
+      resultDiv.className = correct
+        ? 'result-box result-correct'
+        : 'result-box result-wrong';
+
+resultDiv.innerHTML = `
+  <div style="font-size: 1.4rem; margin-bottom: 8px;">
+    <strong>${correct ? '答對了！' : '答錯了！'}</strong>
+  </div>
+  <div style="font-size: 1.3rem;">
+    正確答案：${escapeHtml(q.answer)}${correctOption ? `．${escapeHtml(correctOption.text)}` : ''}
+  </div>
+  <div style="font-size: 1.3rem;">
+    解析：${q.explanation ? escapeHtml(q.explanation) : '本題暫無解析'}
+  </div>
+`;
+
+
+      document.getElementById('practiceNextBtn').classList.remove('hidden');
+    }
+
+    function nextPracticeQuestion() {
+      practiceIndex++;
+
+      if (practiceIndex >= practicePool.length) {
+        handlePracticeCompletion();
+        return;
+      }
+
+      renderPracticeQuestion();
+    }
+
+    function handlePracticeCompletion() {
+      const modal = document.getElementById('practiceCompleteModal');
+      const title = document.getElementById('practiceCompleteTitle');
+      const text = document.getElementById('practiceCompleteText');
+      const nextBtn = document.getElementById('practiceNextTopicBtn');
+
+      nextBtn.classList.add('hidden');
+      nextBtn.onclick = null;
+
+      if (currentPracticeTopic === '__ALL__') {
+        title.textContent = '練習完成';
+        text.textContent = '全部題目已練習完成。';
+        modal.classList.remove('hidden');
+        return;
+      }
+
+      const currentTopicIndex = allTopics.indexOf(currentPracticeTopic);
+
+      if (currentTopicIndex === -1) {
+        title.textContent = '本單元完成';
+        text.textContent = `「${currentPracticeTopic}」練習完成。`;
+        modal.classList.remove('hidden');
+        return;
+      }
+
+      const nextTopic = allTopics[currentTopicIndex + 1];
+
+      if (nextTopic) {
+        title.textContent = '本單元完成';
+        text.textContent = `「${currentPracticeTopic}」練習完成。\n是否進到下一個主題「${nextTopic}」？`;
+
+        nextBtn.textContent = '進到下一個主題';
+        nextBtn.classList.remove('hidden');
+        nextBtn.onclick = function () {
+          closePracticeCompleteModal();
+          startPractice(nextTopic);
+        };
+      } else {
+        title.textContent = '全部單元完成';
+        text.textContent = `「${currentPracticeTopic}」已是最後一個主題。\n全部主題練習完成。`;
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closePracticeCompleteModal() {
+      document.getElementById('practiceCompleteModal').classList.add('hidden');
+    }
+
+    function closePracticeCompleteModalAndBack() {
+      closePracticeCompleteModal();
+      showPracticeSetup();
+    }
+
+    function showQuizSetup() {
+      showOnly('quizSetupView');
+    }
+
+    function startQuiz() {
+      const range1to100 = allQuestions.filter(q => {
+        const num = parseQuestionNumber(q.number);
+        return num >= 1 && num <= 100;
+      });
+
+      const range101to150 = allQuestions.filter(q => {
+        const num = parseQuestionNumber(q.number);
+        return num >= 101 && num <= 150;
+      });
+
+      if (range1to100.length < 30) {
+        showAlert(`選擇題的題目不足 30 題，目前只有 ${range1to100.length} 題`);
+        return;
+      }
+      if (range101to150.length < 30) {
+        showAlert(`是非題的題目不足 30 題，目前只有 ${range101to150.length} 題`);
+        return;
+      }
+
+      const pickedPart1 = pickRandom(range1to100, 30);
+      const pickedPart2 = pickRandom(range101to150, 30);
+
+      pickedPart1.sort((a, b) => parseQuestionNumber(a.number) - parseQuestionNumber(b.number));
+      pickedPart2.sort((a, b) => parseQuestionNumber(a.number) - parseQuestionNumber(b.number));
+
+      quizPool = [...pickedPart2, ...pickedPart1];
+
+      quizIndex = 0;
+      quizAnswers = {};
+      quizWrongList = [];
+
+      renderQuizQuestion();
+      showOnly('quizView');
+    }
+    
+
+    function renderQuizQuestion() {
+      const q = quizPool[quizIndex];
+
+      document.getElementById('quizTopicPill').textContent = `主題：${q.topic || '未分類'}`;
+     // document.getElementById('quizTypePill').textContent = q.type === 'mc' ? '選擇題' : '是非題';
+      document.getElementById('quizProgress').textContent = `第 ${quizIndex + 1} / ${quizPool.length} 題`;
+      document.getElementById('quizQuestion').textContent = q.question || '';
+
+      const optionsDiv = document.getElementById('quizOptions');
+      optionsDiv.innerHTML = '';
+
+      (q.options || []).forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-option';
+        btn.innerHTML = `<strong>${escapeHtml(opt.index)}.</strong> ${escapeHtml(opt.text)}`;
+
+        if (String(quizAnswers[q.uid]) === String(opt.index)) {
+          btn.classList.add('correct');
+        }
+
+        btn.onclick = () => answerQuiz(q.uid, opt.index);
+        optionsDiv.appendChild(btn);
+      });
+
+      document.getElementById('quizPrevBtn').disabled = quizIndex === 0;
+
+      if (quizIndex === quizPool.length - 1) {
+        document.getElementById('quizNextBtn').classList.add('hidden');
+        document.getElementById('quizSubmitBtn').classList.remove('hidden');
+      } else {
+        document.getElementById('quizNextBtn').classList.remove('hidden');
+        document.getElementById('quizSubmitBtn').classList.add('hidden');
+      }
+    }
+
+    function answerQuiz(uid, selectedIndex) {
+      quizAnswers[uid] = selectedIndex;
+      renderQuizQuestion();
+    }
+
+    function nextQuizQuestion() {
+      const currentQuestionUid = quizPool[quizIndex].uid;
+
+      if (!quizAnswers[currentQuestionUid]) {
+        showAlert("你這一題還沒有作答喔！");
+        return; 
+      }
+
+      if (quizIndex < quizPool.length - 1) {
+        quizIndex++;
+        renderQuizQuestion();
+      }
+    }
+
+    function prevQuizQuestion() {
+      if (quizIndex > 0) {
+        quizIndex--;
+        renderQuizQuestion();
+      }
+    }
+
+    function submitQuiz() {
+      const unanswered = quizPool.filter(q => !quizAnswers[q.uid]);
+      if (unanswered.length > 0) {
+        showConfirm(`還有 ${unanswered.length} 題未作答，確定要交卷嗎？`, performSubmit);
+      } else {
+        performSubmit();
+      }
+    }
+
+    function performSubmit() {
+      let correctCount = 0;
+      quizWrongList = [];
+
+      quizPool.forEach(q => {
+        const userAnswer = quizAnswers[q.uid] ? String(quizAnswers[q.uid]) : '';
+        const correctAnswer = String(q.answer);
+
+        if (userAnswer === correctAnswer) {
+          correctCount++;
+        } else {
+          const correctOption = (q.options || []).find(o => String(o.index) === String(correctAnswer));
+          const userOption = (q.options || []).find(o => String(o.index) === String(userAnswer));
+
+          quizWrongList.push({
+            topic: q.topic,
+            type: q.type,
+            number: q.number,
+            question: q.question,
+            userAnswer: userAnswer,
+            userAnswerText: userOption ? userOption.text : '未作答',
+            correctAnswer: correctAnswer,
+            correctAnswerText: correctOption ? correctOption.text : '',
+            explanation: q.explanation || ''
+          });
+        }
+      });
+
+      const total = quizPool.length;
+      const wrongCount = total - correctCount;
+      const accuracy = total === 0 ? 0 : ((correctCount / total) * 100).toFixed(1);
+
+      document.getElementById('quizScoreText').textContent = `${correctCount} / ${total} 分`;
+      document.getElementById('quizAccuracyText').textContent = `正確率：${accuracy}%`;
+      document.getElementById('quizSummaryText').innerHTML = `
+        答對：${correctCount} 題<br>
+        答錯：${wrongCount} 題
+      `;
+
+      showOnly('quizResultView');
+    }
+
+    function showQuizReview() {
+      const list = document.getElementById('quizReviewList');
+      list.innerHTML = '';
+
+      if (quizWrongList.length === 0) {
+        list.innerHTML = '<div class="result-box result-correct"><strong>太好了，本次全部答對！</strong></div>';
+      } else {
+        quizWrongList.forEach((item, idx) => {
+          const div = document.createElement('div');
+          div.className = 'review-item';
+          div.innerHTML = `
+            <h4>錯題 ${idx + 1}</h4>
+            <div><strong>主題：</strong>${escapeHtml(item.topic)}</div>
+            <div><strong>題號：</strong>${escapeHtml(String(item.number || ''))}</div>
+            <div style="margin-top:8px;"><strong>題目：</strong>${escapeHtml(item.question)}</div>
+            <div style="margin-top:8px;"><strong>你的答案：</strong>${escapeHtml(item.userAnswer)} ${escapeHtml(item.userAnswerText || '')}</div>
+            <div><strong>正確答案：</strong>${escapeHtml(item.correctAnswer)} ${escapeHtml(item.correctAnswerText || '')}</div>
+            <div><strong>解析：</strong>${item.explanation ? escapeHtml(item.explanation) : '本題暫無解析'}</div>
+          `;
+          list.appendChild(div);
+        });
+      }
+
+      showOnly('quizReviewView');
+    }
+
+    function backToQuizResult() {
+      showOnly('quizResultView');
+    }
+
+    function shuffle(arr) {
+      const newArr = [...arr];
+      for (let i = newArr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+      }
+      return newArr;
+    }
+
+    function pickRandom(arr, count) {
+      return shuffle(arr).slice(0, count);
+    }
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>
