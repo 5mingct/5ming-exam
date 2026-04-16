@@ -482,10 +482,10 @@
 
   <script>
     // ★★★ 改成你自己的 GAS Web App 網址 ★★★
-    const API_BASE = 'https://script.google.com/macros/s/AKfycbyhQErjWAawejY_v22EiDmN2BlAFqYb9JWMq1LF_0ePipXoLIr3IlFKFuh3i8WpG2mtww/exec';
+   const API_BASE = 'https://script.google.com/macros/s/AKfycbxyx4R1JVc1j5BOPS1A_bJ6ZiB98pn_EiLqZhkYaHUGQpA6yjpAnD1uxamzkcRbFm5n/exec';
+   // 經典背誦（最終版）
+   const CLASSIC_RECITE_URL = 'https://script.google.com/macros/s/AKfycbw_k8F4eJ7qm_pTRF0NCqCcXQPREZ8Jn7hmG03VUTSpHwW9LCRM7u2HcqeO_onmu4Ne/exec';
 
-    // 經典背誦頁面連結
-    const CLASSIC_RECITE_URL = 'https://script.google.com/macros/s/AKfycbw_k8F4eJ7qm_pTRF0NCqCcXQPREZ8Jn7hmG03VUTSpHwW9LCRM7u2HcqeO_onmu4Ne/exec';
 
     let allQuestions = [];
     let allTopics = [];
@@ -545,8 +545,19 @@
       });
     }
 
-    function goToClassicRecite() {
-      window.open(CLASSIC_RECITE_URL, '_blank');
+     function goToClassicRecite() {
+      if (!CLASSIC_RECITE_URL) {
+         showAlert('經典背誦功能尚未設定');
+         return;
+        }
+
+     try {
+       // ✅ 同頁跳轉（最穩）
+        window.location.href = CLASSIC_RECITE_URL;
+        } 
+        catch (e) {
+        showAlert('無法開啟經典背誦頁面');
+        }
     }
 
     function showAlert(text, title = '🌟溫馨提醒') {
