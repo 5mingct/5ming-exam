@@ -482,7 +482,7 @@
 
   <script>
     // ★★★ 改成你自己的 GAS Web App 網址 ★★★
-   const API_BASE = 'https://script.google.com/macros/s/AKfycbzZf6v-mrRlDRK1LryVva0558uWR4xwI24EHqiJuTswLLDdelHz7hBhcwamL4IjBCySag/exec';
+   const API_BASE = 'https://script.google.com/macros/s/AKfycbxCbpi9dzbMvj4bzS8w_oPzQYrOn6J5KcRzp1bZ6yvnSNSmk3z0ablLAMfpvnOUr4Kj/exec';
    // 經典背誦（最終版）
    const CLASSIC_RECITE_URL = 'https://script.google.com/macros/s/AKfycbwosLPfduJLcMr9cqy6knhewMii6hqI6K9yOOnSeXwSGxLTt_vS9xr4GxHFapOBGd5K/exec';
 
@@ -766,7 +766,7 @@
           <strong>${correct ? '答對了！' : '答錯了！'}</strong>
         </div>
         <div style="font-size: 1.3rem;">
-          正確答案：${escapeHtml(q.answer)}${correctOption ? `．${escapeHtml(correctOption.text)}` : ''}
+          正確答案：${escapeHtml(q.answer)}${correctOption ? `.${escapeHtml(correctOption.text)}` : ''}
         </div>
         <div style="font-size: 1.3rem;">
           解析：${q.explanation ? escapeHtml(q.explanation) : '本題暫無解析'}
