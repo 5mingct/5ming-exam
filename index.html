@@ -104,7 +104,7 @@
     .btn-classic {
       background: #c7d9a5;
       color: #4a4a4a;
-      font-size:25px;
+      font-size: 25px;
     }
 
     .btn-option {
@@ -481,11 +481,11 @@
   </div>
 
   <script>
-    // ★★★ 改成你自己的 GAS Web App 網址 ★★★
-   const API_BASE = 'https://script.google.com/macros/s/AKfycbxCbpi9dzbMvj4bzS8w_oPzQYrOn6J5KcRzp1bZ6yvnSNSmk3z0ablLAMfpvnOUr4Kj/exec';
-   // 經典背誦（最終版）
-   const CLASSIC_RECITE_URL = 'https://script.google.com/macros/s/AKfycbwosLPfduJLcMr9cqy6knhewMii6hqI6K9yOOnSeXwSGxLTt_vS9xr4GxHFapOBGd5K/exec';
+    // 題庫 API
+    const API_BASE = 'https://script.google.com/macros/s/AKfycbxCbpi9dzbMvj4bzS8w_oPzQYrOn6J5KcRzp1bZ6yvnSNSmk3z0ablLAMfpvnOUr4Kj/exec';
 
+    // 經典背誦 GitHub Pages 版
+    const CLASSIC_RECITE_URL = 'https://5mingct.github.io/5mingtest/classic/';
 
     let allQuestions = [];
     let allTopics = [];
@@ -545,19 +545,17 @@
       });
     }
 
-     function goToClassicRecite() {
+    function goToClassicRecite() {
       if (!CLASSIC_RECITE_URL) {
-         showAlert('經典背誦功能尚未設定');
-         return;
-        }
+        showAlert('經典背誦功能尚未設定');
+        return;
+      }
 
-     try {
-       // ✅ 同頁跳轉（最穩）
+      try {
         window.location.href = CLASSIC_RECITE_URL;
-        } 
-        catch (e) {
+      } catch (e) {
         showAlert('無法開啟經典背誦頁面');
-        }
+      }
     }
 
     function showAlert(text, title = '🌟溫馨提醒') {
